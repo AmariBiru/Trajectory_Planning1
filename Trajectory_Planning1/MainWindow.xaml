@@ -1,0 +1,278 @@
+﻿<Window
+    x:Class="Trajectory_Planning1.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:oxy="http://oxyplot.org/wpf"
+    xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="av"
+    Title="Robot Coordinate Plot"
+    Height="650"
+    Width="914"
+    Background="#FFFFFF">
+
+    <Grid>
+        <!-- === Layout rows === -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Toolbar -->
+            <RowDefinition Height="*"/>
+            <!-- Main content -->
+        </Grid.RowDefinitions>
+
+        <!-- === CONTROL BAR === -->
+        <Grid Grid.Row="0" Margin="20,10,20,10" Height="40">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="130"/>
+            </Grid.ColumnDefinitions>
+
+            <ComboBox x:Name="cmbPorts"
+                      Grid.Column="0"
+                      Height="25"
+                      FontSize="14"
+                      SelectionChanged="ComboBox_SelectionChanged"/>
+
+            <Button x:Name="btnConnect"
+                    Grid.Column="2"
+                    Content="Open Port"
+                    FontSize="14"
+                    Click="btnConnect_Click"/>
+
+            <Button x:Name="btnOrig"
+                    Grid.Column="4"
+                    Content="Original point"
+                    FontSize="14"
+                    Click="btnConnectOrig_Click"/>
+        </Grid>
+
+        <!-- === MAIN CONTENT === -->
+        <Grid Grid.Row="1">
+
+            <!-- === Coordinate Plot === -->
+            <oxy:PlotView x:Name="plotView"
+                          Width="360" Height="360"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Top"
+                          Margin="20,20,0,0"
+                          Background="White"/>
+
+            <!-- === Initialization === -->
+            <GroupBox Header="Initialization"
+                      Width="360" Height="180"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Top"
+                      Margin="20,400,0,0">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Row 1 -->
+                    <Label Grid.Row="0" Grid.Column="0" Content="a1:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtA1" Margin="5"/>
+                    <Label Grid.Row="0" Grid.Column="2" Content="titik(n):" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="0" Grid.Column="3" x:Name="txtTitik" Margin="5"/>
+                    <RadioButton Grid.Row="0" Grid.Column="4"
+                                 x:Name="rbTimePath"
+                                 GroupName="TimeMode"
+                                 Content="Time/Path"
+                                 VerticalAlignment="Center"
+                                 Margin="5,0,0,0"
+                                 IsChecked="True"/>
+
+                    <!-- Row 2 -->
+                    <Label Grid.Row="1" Grid.Column="0" Content="a2:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtA2" Margin="5"/>
+                    <Label Grid.Row="1" Grid.Column="2" Content="waktu(t):" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="1" Grid.Column="3" x:Name="txtWaktu" Margin="5"/>
+                    <RadioButton Grid.Row="1" Grid.Column="4"
+                                 x:Name="rbTimeTrack"
+                                 GroupName="TimeMode"
+                                 Content="Time/Track"
+                                 VerticalAlignment="Center"
+                                 Margin="5,0,0,0"/>
+
+                    <!-- Row 3 -->
+                    <Label Grid.Row="2" Grid.Column="0" Content="a3:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtA3" Margin="5"/>
+                    <Button Grid.Row="2" Grid.Column="4"
+                            x:Name="btnClearPath"
+                            Content="Clear Path"
+                            Margin="5"
+                            Width="80"
+                            Click="btnClearPath_Click"/>
+                </Grid>
+            </GroupBox>
+
+            <!-- === Joint Space Representation === -->
+            <GroupBox Header="Joint Space Representation"
+                      Width="515" Height="222"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Top"
+                      Margin="400,20,0,0">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left controls -->
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Content="Initial Posture:" Margin="0,0,0,5"/>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <TextBox x:Name="txtInit1" Width="80" Margin="5"/>
+                            <TextBox x:Name="txtInit2" Width="80" Margin="5"/>
+                            <TextBox x:Name="txtInit3" Width="80" Margin="5"/>
+                        </StackPanel>
+
+                        <Label Grid.Row="2" Content="Final Posture:" Margin="0,10,0,5"/>
+                        <StackPanel Grid.Row="3" Orientation="Horizontal">
+                            <TextBox x:Name="txtFinal1" Width="80" Margin="5"/>
+                            <TextBox x:Name="txtFinal2" Width="80" Margin="5"/>
+                            <TextBox x:Name="txtFinal3" Width="80" Margin="5"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,10,0,0">
+                            <Button x:Name="btnCalculate"
+                                    Content="Calculate"
+                                    Width="100"
+                                    Margin="5"
+                                    Click="btnCalculate_Click"/>
+                            <Button x:Name="btnRun"
+                                    Content="Run"
+                                    Width="100"
+                                    Margin="5"
+                                    Click="btnRun_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Right list -->
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Trajectory Generated"
+                                   FontFamily="Consolas"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,2"/>
+                        <ListBox x:Name="lbJointList"
+                                 Width="180" Height="150"
+                                 FontFamily="Consolas" FontSize="12"/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+
+            <!-- === Work Space Representation === -->
+            <GroupBox Header="Work Space Representation"
+                      Width="515" Height="222"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Top"
+                      Margin="400,268,0,0">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left controls -->
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Content="Initial Posture:" Margin="0,0,0,5"/>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <TextBox x:Name="txtWorkInit1" Width="80" Margin="5"/>
+                            <TextBox x:Name="txtWorkInit2" Width="80" Margin="5"/>
+                            <TextBox x:Name="txtWorkInit3" Width="80" Margin="5"/>
+                        </StackPanel>
+
+                        <Label Grid.Row="2" Content="Final Posture:" Margin="0,10,0,5"/>
+                        <StackPanel Grid.Row="3" Orientation="Horizontal">
+                            <TextBox x:Name="txtWorkFinal1" Width="80" Margin="5"/>
+                            <TextBox x:Name="txtWorkFinal2" Width="80" Margin="5"/>
+                            <TextBox x:Name="txtWorkFinal3" Width="80" Margin="5"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,10,0,0">
+                            <Button x:Name="btnWorkCalculate"
+                                    Content="Calculate"
+                                    Width="100"
+                                    Margin="5"
+                                    Click="btnWorkCalculate_Click"/>
+                            <Button x:Name="btnWorkRun"
+                                    Content="Run"
+                                    Width="100"
+                                    Margin="5"
+                                    Click="btnWorkRun_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Right list -->
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Trajectory Generated"
+                                   FontFamily="Consolas"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,2"/>
+                        <ListBox x:Name="lbWorkList"
+                                 Width="180" Height="150"
+                                 FontFamily="Consolas" FontSize="12"/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+
+            <!-- === Editable Trajectory Points === -->
+            <GroupBox Header="Trajectory Points"
+                      Width="515" Height="200"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Top"
+                      Margin="400,500,0,0">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Scrollable list -->
+                    <ScrollViewer Grid.Row="0" Height="130" VerticalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="trajectoryRows" Orientation="Vertical"/>
+                    </ScrollViewer>
+
+                    <!-- Run All button -->
+                    <Button Grid.Row="1"
+                            x:Name="btnRunAll"
+                            Content="Run All Points"
+                            Background="LightGreen"
+                            Margin="0,5,0,0"
+                            Height="28"
+                            Click="btnRunAll_Click"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>
