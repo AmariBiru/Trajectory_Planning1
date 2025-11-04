@@ -7,8 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="av"
     Title="Robot Coordinate Plot"
-    Height="650"
-    Width="914"
+    Height="796"
+    Width="936"
     Background="#FFFFFF">
 
     <Grid>
@@ -141,14 +141,14 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <Label Grid.Row="0" Content="Initial Posture:" Margin="0,0,0,5"/>
+                        <Label Grid.Row="0" Content="Initial Posture (θ1, θ2, θ3):" Margin="0,0,0,5"/>
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
                             <TextBox x:Name="txtInit1" Width="80" Margin="5"/>
                             <TextBox x:Name="txtInit2" Width="80" Margin="5"/>
                             <TextBox x:Name="txtInit3" Width="80" Margin="5"/>
                         </StackPanel>
 
-                        <Label Grid.Row="2" Content="Final Posture:" Margin="0,10,0,5"/>
+                        <Label Grid.Row="2" Content="Final Posture (θ1, θ2, θ3):" Margin="0,10,0,5"/>
                         <StackPanel Grid.Row="3" Orientation="Horizontal">
                             <TextBox x:Name="txtFinal1" Width="80" Margin="5"/>
                             <TextBox x:Name="txtFinal2" Width="80" Margin="5"/>
@@ -171,7 +171,7 @@
 
                     <!-- Right list -->
                     <StackPanel Grid.Column="2">
-                        <TextBlock Text="Trajectory Generated"
+                        <TextBlock Text="Trajectory Generated (θ1, θ2, θ3)"
                                    FontFamily="Consolas"
                                    FontWeight="Bold"
                                    Margin="0,0,0,2"/>
@@ -205,14 +205,14 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <Label Grid.Row="0" Content="Initial Posture:" Margin="0,0,0,5"/>
+                        <Label Grid.Row="0" Content="Initial Posture (Qx, Qy, ∅):" Margin="0,0,0,5"/>
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
                             <TextBox x:Name="txtWorkInit1" Width="80" Margin="5"/>
                             <TextBox x:Name="txtWorkInit2" Width="80" Margin="5"/>
                             <TextBox x:Name="txtWorkInit3" Width="80" Margin="5"/>
                         </StackPanel>
 
-                        <Label Grid.Row="2" Content="Final Posture:" Margin="0,10,0,5"/>
+                        <Label Grid.Row="2" Content="Final Posture (Qx, Qy, ∅):" Margin="0,10,0,5"/>
                         <StackPanel Grid.Row="3" Orientation="Horizontal">
                             <TextBox x:Name="txtWorkFinal1" Width="80" Margin="5"/>
                             <TextBox x:Name="txtWorkFinal2" Width="80" Margin="5"/>
@@ -235,7 +235,7 @@
 
                     <!-- Right list -->
                     <StackPanel Grid.Column="2">
-                        <TextBlock Text="Trajectory Generated"
+                        <TextBlock Text="Trajectory Generated (Qx, Qy, ∅)"
                                    FontFamily="Consolas"
                                    FontWeight="Bold"
                                    Margin="0,0,0,2"/>

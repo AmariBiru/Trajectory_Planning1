@@ -287,43 +287,47 @@ using System.Windows.Controls;
             }
 
 
-            private void InverseKinematic1(double iqx, double iqy, double iorientasi)
-            {
-                // Convert orientation to radians
-                double phi = iorientasi * Math.PI / 180.0;
+        private void InverseKinematic1(double iqx, double iqy, double iorientasi)
+        {
+            // Convert orientation to radians
+            double phi = iorientasi * Math.PI / 180.0;
 
-                if (!double.TryParse(txtA1.Text, out double a1)) a1 = 100;
-                if (!double.TryParse(txtA2.Text, out double a2)) a2 = 80;
-                if (!double.TryParse(txtA3.Text, out double a3)) a3 = 60;
+            // Link lengths
+            if (!double.TryParse(txtA1.Text, out double a1)) a1 = 100;
+            if (!double.TryParse(txtA2.Text, out double a2)) a2 = 80;
+            if (!double.TryParse(txtA3.Text, out double a3)) a3 = 60;
 
-                // Wrist position
-                double wx = iqx - a3 * Math.Cos(phi);
-                double wy = iqy - a3 * Math.Sin(phi);
+            // Wrist position
+            double wx = iqx - a3 * Math.Cos(phi);
+            double wy = iqy - a3 * Math.Sin(phi);
 
-                // Compute D = cos(θ2)
-                double D = (wx * wx + wy * wy - a1 * a1 - a2 * a2) / (2 * a1 * a2);
-                D = Math.Clamp(D, -1.0, 1.0);
+            // Compute D = cos(θ2)
+            double D = (wx * wx + wy * wy - a1 * a1 - a2 * a2) / (2 * a1 * a2);
+            D = Math.Clamp(D, -1.0, 1.0);
 
-                // === Choose elbow-UP configuration ===
-                double t2 = -Math.Acos(D);   // NEGATIVE to keep arm in upper half-plane
+            // === Select configuration based on quadrant ===
+            // Quadrant 1 → elbow-up (y ≥ 0 and x ≥ 0)
+            // Quadrant 2 → elbow-down (y ≥ 0 and x < 0)
+            bool elbowUp = !(wx < 0 && wy >= 0); // elbow-down only in 2nd quadrant
 
-                // Compute θ1 for elbow-up
-                double t1 = Math.Atan2(wy, wx) - Math.Atan2(a2 * Math.Sin(t2), a1 + a2 * Math.Cos(t2));
+            double t2 = elbowUp ? -Math.Acos(D) : Math.Acos(D);
 
-                // Compute θ3 for desired orientation
-                double t3 = phi - t1 - t2;
+            // Compute θ1
+            double t1 = Math.Atan2(wy, wx) - Math.Atan2(a2 * Math.Sin(t2), a1 + a2 * Math.Cos(t2));
 
-                // Convert to degrees
-                t1 *= 180.0 / Math.PI;
-                t2 *= 180.0 / Math.PI;
-                t3 *= 180.0 / Math.PI;
+            // Compute θ3 for desired orientation
+            double t3 = phi - t1 - t2;
 
+            // Convert to degrees
+            t1 *= 180.0 / Math.PI;
+            t2 *= 180.0 / Math.PI;
+            t3 *= 180.0 / Math.PI;
 
-                ArmDraw(t1, t2, t3);
-            }
+            ArmDraw(t1, t2, t3);
+        }
 
-            // Calculate button: fill teta arrays and listbox
-            private void btnCalculate_Click(object sender, RoutedEventArgs e)
+        // Calculate button: fill teta arrays and listbox
+        private void btnCalculate_Click(object sender, RoutedEventArgs e)
             {
                 try
                 {
